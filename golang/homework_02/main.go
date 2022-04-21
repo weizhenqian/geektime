@@ -41,22 +41,25 @@ func GetVersion(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Version的内容为:", version)
 }
 
+//3.Server端记录访问日志包括客户端 IP，HTTP 返回码，输出到 server端的标准输出
+//IP获取的地址为127.0.0.1，code尝试了httpsnoop，但是调用失败了。
 func SaveClientInfo(w http.ResponseWriter, r *http.Request) {
 	info := exnet.ClientIP(r)
 	fmt.Fprintln(w, "Client的IP信息为:%V", info)
 }
 
+//不太理解StatusText的用法，修改为404并无反应
 func HealthCode(w http.ResponseWriter, r *http.Request) {
+	//StatusText(code int)
 	code := 200
-	w.WriteHeader(200)
+	w.WriteHeader(code)
+	http.StatusText(code)
 	fmt.Fprintln(w, code)
 }
 
 func main() {
 	http.HandleFunc("/", IndexHandler)
 	http.HandleFunc("/version", GetVersion)
-	http.HandleFunc("/info", SaveClientInfo)
 	http.HandleFunc("/healthz", HealthCode)
 	http.ListenAndServe(":8888", nil)
-
 }
