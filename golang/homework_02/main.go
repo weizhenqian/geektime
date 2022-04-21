@@ -32,8 +32,12 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Header的内容为:", header)
 }
 
+//读取当前系统的环境变量中的 VERSION 配置，并写入 response header
+//启动方式：export VERSION=xxxx && go run main.go
 func GetVersion(w http.ResponseWriter, r *http.Request) {
+	//os模块用于系统相关操作
 	version := os.Getenv("VERSION")
+	w.Header().Add("version", version)
 	fmt.Fprintln(w, "Version的内容为:", version)
 }
 
@@ -44,6 +48,7 @@ func SaveClientInfo(w http.ResponseWriter, r *http.Request) {
 
 func HealthCode(w http.ResponseWriter, r *http.Request) {
 	code := 200
+	w.WriteHeader(200)
 	fmt.Fprintln(w, code)
 }
 
