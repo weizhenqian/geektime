@@ -9,10 +9,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
 
+	"github.com/felixge/httpsnoop"
 	"github.com/thinkeridea/go-extend/exnet"
 )
 
@@ -58,8 +60,22 @@ func HealthCode(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// myH is your app's http handler, perhaps a http.ServeMux or similar.
+	var myH http.Handler
+	// wrappedH wraps myH in order to log every request.
+	wrappedH := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		m := httpsnoop.CaptureMetrics(myH, w, r)
+		log.Printf(
+			"%s %s (code=%d dt=%s written=%d)",
+			r.Method,
+			r.URL,
+			m.Code,
+			m.Duration,
+			m.Written,
+		)
+	})
+	http.ListenAndServe(":8888", nil)
 	http.HandleFunc("/", IndexHandler)
 	http.HandleFunc("/version", GetVersion)
 	http.HandleFunc("/healthz", HealthCode)
-	http.ListenAndServe(":8888", nil)
 }
