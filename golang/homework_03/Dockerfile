@@ -1,5 +1,6 @@
 FROM golang:1.18-alpine AS build
 ENV GOPATH=''
+ENV CGO_ENABLED=0
 ENV GOPROXY=https://goproxy.cn
 COPY main.go /go/src
 WORKDIR /go/src
