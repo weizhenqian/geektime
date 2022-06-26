@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: httpserver
-          images: docker.io/wwwisdom/homework6
-          port:
+          image: docker.io/wwwisdom/homework6
+          ports:
             - containersPort: "2112"
