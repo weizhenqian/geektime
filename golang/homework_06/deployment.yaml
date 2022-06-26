@@ -1,0 +1,21 @@
+kind: Deployment
+metadata:
+  name: httpserver
+spec:
+  replicas: 1
+  selector:
+    matchlables:
+      app: httpserver
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "2112"
+      lables:
+        app: httpserver
+    spec:
+      containers:
+        - name: httpserver
+          images: docker.io/wwwisdom/homework6
+          port:
+            - containersPort: "2112"
