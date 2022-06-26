@@ -19,4 +19,4 @@ spec:
         - name: httpserver
           image: docker.io/wwwisdom/homework6
           ports:
-            - containersPort: "2112"
+            - containerPort: "2112"
